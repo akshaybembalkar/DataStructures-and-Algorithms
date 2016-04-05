@@ -19,6 +19,7 @@ public class Main {
 		switch(ch){
 		
 		case 1:
+			
 			System.out.print("Enter Node value: ");
 			obj.insert(scanner.nextInt());
 			
