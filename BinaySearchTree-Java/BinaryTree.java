@@ -5,7 +5,7 @@ import java.util.List;
 
 public class BinaryTree {
     public Node root;
-   
+       
     List<Node> list = new ArrayList<Node>();
        
     HashMap<Integer,List<Integer>> myMap = new HashMap<Integer,List<Integer>>();;
@@ -17,7 +17,7 @@ public class BinaryTree {
 
     public void insert(int key) {
         Node newNode = new Node(key);
-        if (root == null) {
+        if (root == null) {	
             root = newNode;
             return;
         }
@@ -29,12 +29,14 @@ public class BinaryTree {
                 current = current.left;
                 if (current == null) {
                     parent.left = newNode;
+                    newNode.parentNode = parent;
                     return;
                 }
             } else {
                 current = current.right;
                 if (current == null) {
                     parent.right = newNode;
+                    newNode.parentNode = parent;
                     return;
                 }
             }
@@ -43,7 +45,9 @@ public class BinaryTree {
     }
     public void display(Node root) {
     	if(root!=null){
-    	System.out.print(root.data+" ");
+    		System.out.println(root.data+" ");
+   /* 		if(root.parentNode!=null)
+    			System.out.println(root.data+":"+"Parent: "+root.parentNode.data);//+root.nodeCount+" ");*/
     	display(root.left);
     	display(root.right);
     	}
@@ -92,13 +96,17 @@ public class BinaryTree {
      
         // If the key to be deleted is smaller than the root's key,
         // then it lies in left subtree
-        if (key < root.data)
+        if (key < root.data){
             root.left = deleteNode(root.left, key);
+            root.left.parentNode = root;
+        }
      
         // If the key to be deleted is greater than the root's key,
         // then it lies in right subtree
-        else if (key > root.data)
+        else if (key > root.data){
             root.right = deleteNode(root.right, key);
+            root.right.parentNode = root;
+        }
      
         else
         {
@@ -108,6 +116,7 @@ public class BinaryTree {
                 Node temp = root.right;
                 //free(root);
                 this.root = temp;
+              //  temp.parentNode = this.root;
                 myMap.clear();
                 return temp;
             }
@@ -116,6 +125,7 @@ public class BinaryTree {
                 Node temp = root.left;
                 //free(root);
                 this.root = temp;
+               // temp.parentNode = this.root;
                 myMap.clear();
                 return temp;
             }
@@ -127,6 +137,7 @@ public class BinaryTree {
             root.right = deleteNode(root.right, temp.data);
         }
         this.root = root;
+   //     root.parentNode = this.root;
         myMap.clear();
         return root;
     }
@@ -161,7 +172,7 @@ public class BinaryTree {
             //Node n = list.get(0);
             Node n = list.remove(0);
             if(previous!=null) {
-                if (n.data < previous.data) {
+                if (n.data < previous.data || n.parentNode==previous) {
                     level++;
                   //  levelList.clear();
                     //flag = false;
@@ -190,9 +201,11 @@ public class BinaryTree {
         int data;
         Node left;
         Node right;
+        Node parentNode;
 
         public Node(int data) {
             this.data = data;
+            parentNode = null;
             left = null;
             right = null;
         }
